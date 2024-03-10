@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 const Users = () => {
 
     const[users, setUsers] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get("http://localhost:3001")
@@ -13,6 +14,21 @@ const Users = () => {
         })
         .catch(err => console.log(err))
     }, [users])
+
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/auth/verify')
+        .then(res=> {
+            if(res.data.status) {
+                navigate('/users')
+            } else {
+                navigate('/login')
+            }
+            console.log(res)
+        })
+    },)
+
+
 
     const handleDelete = (id) => {
         axios.delete("http://localhost:3001/deleteUser/"+id)

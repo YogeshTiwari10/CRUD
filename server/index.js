@@ -2,12 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userModel = require("./models/Users")
+const router = require('./Route/user')
+const cookieParser = require("cookie-parser")
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    credentials: true
+}))
+app.use(cookieParser())
 app.use(express.json());
 
 mongoose.connect("mongodb://127.0.0.1:27017/crud")
+app.use('/auth', router)
 
 app.post("/createUser", (req, res) => {
     userModel.create(req.body)
